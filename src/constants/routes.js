@@ -1,0 +1,15 @@
+export const ROUTES = {
+  LANDING: '/',
+  LOGIN: '/login',
+  REGISTER: '/register',
+  HOME: '/home',
+  CABS: '/cabs',
+  BOOK_CAB: '/book/:id',
+  MY_BOOKINGS: '/my-bookings',
+  PROFILE: '/profile',
+  ADMIN_DASHBOARD: '/admin',
+  ADMIN_USERS: '/admin/users',
+  ADMIN_DRIVERS: '/admin/drivers',
+  ADMIN_ADD_CAB: '/admin/add-cab',
+  ADMIN_BOOKINGS: '/admin/bookings',
+};
