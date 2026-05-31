@@ -2,12 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { ThemeProvider } from 'next-themes';
+import { Toaster } from 'sonner';
 import './styles/global.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <App />
+      <Toaster position="top-right" richColors />
+    </ThemeProvider>
   </React.StrictMode>,
 );
 
