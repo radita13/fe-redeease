@@ -27,7 +27,7 @@ export default function App() {
       <Suspense
         fallback={
           <div className='bg-background flex min-h-screen items-center justify-center'>
-            <div className='border-primary h-10 w-10 animate-spin rounded-full border-4 border-t-transparent'></div>
+            <div data-testid="loading-spinner" className='border-primary h-10 w-10 animate-spin rounded-full border-4 border-t-transparent'></div>
           </div>
         }
       >

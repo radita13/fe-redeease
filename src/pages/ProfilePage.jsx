@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { User, Mail, Phone, Star, Car, Calendar, Loader2, ShieldCheck } from 'lucide-react';
+import { User, Mail, Phone, Star, Car, Calendar, Loader2, ShieldCheck, Lock } from 'lucide-react';
 import { formatSimpleDate } from '@/utils/formatDate';
 import { Label } from '@/components/ui/label';
 
@@ -16,6 +16,16 @@ const profileSchema = yup.object({
   name: yup.string().required('Name is required').min(2, 'Name must be at least 2 characters'),
   email: yup.string().email('Invalid email format').required('Email is required'),
   phone: yup.string().optional().nullable(),
+  password: yup
+    .string()
+    .optional()
+    .test('len', 'Password must be at least 8 characters', (val) => !val || val.length >= 8),
+  confirmPassword: yup
+    .string()
+    .optional()
+    .test('match', 'Passwords must match', function (val) {
+      return (!val && !this.parent.password) || val === this.parent.password;
+    }),
 });
 
 export default function ProfilePage() {
@@ -36,6 +46,7 @@ export default function ProfilePage() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(profileSchema),
@@ -43,17 +54,32 @@ export default function ProfilePage() {
       name: user?.name || '',
       email: user?.email || '',
       phone: user?.phone || '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
   const onSubmit = async (data) => {
-    const payload = { ...data };
+    const payload = {
+      name: data.name,
+      phone: data.phone,
+    };
+    if (data.password) {
+      payload.password = data.password;
+    }
 
     setUpdating(true);
     try {
       const res = await updateProfile(payload);
       if (res.success) {
         toast.success('Profile updated successfully!');
+        reset({
+          name: data.name,
+          email: user?.email || '',
+          phone: data.phone,
+          password: '',
+          confirmPassword: '',
+        });
       } else {
         toast.error(res.message || 'Failed to update profile');
       }
@@ -152,7 +178,8 @@ export default function ProfilePage() {
                     <Input
                       type='email'
                       {...register('email')}
-                      className={`bg-surface-container-low h-11 rounded-xl pl-10 ${
+                      disabled
+                      className={`bg-surface-container-low h-11 cursor-not-allowed rounded-xl pl-10 opacity-60 ${
                         errors.email ? 'border-error' : 'border-outline-variant/30'
                       }`}
                       placeholder='email@example.com'
@@ -174,6 +201,52 @@ export default function ProfilePage() {
                       className='bg-surface-container-low border-outline-variant/30 h-11 rounded-xl pl-10'
                       placeholder='e.g. +62812345678'
                     />
+                  </div>
+                </div>
+
+                <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+                  <div className='space-y-1'>
+                    <Label className='text-on-surface-variant mb-1 block text-sm font-bold tracking-wider'>
+                      New Password (Optional)
+                    </Label>
+                    <div className='relative'>
+                      <Lock className='text-outline-variant absolute top-3 left-3 h-5 w-5' />
+                      <Input
+                        type='password'
+                        {...register('password')}
+                        className={`bg-surface-container-low h-11 rounded-xl pl-10 ${
+                          errors.password ? 'border-error' : 'border-outline-variant/30'
+                        }`}
+                        placeholder='Min. 8 characters'
+                      />
+                    </div>
+                    {errors.password && (
+                      <p className='text-error mt-1 text-xs font-semibold'>
+                        {errors.password.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className='space-y-1'>
+                    <Label className='text-on-surface-variant mb-1 block text-sm font-bold tracking-wider'>
+                      Confirm New Password
+                    </Label>
+                    <div className='relative'>
+                      <Lock className='text-outline-variant absolute top-3 left-3 h-5 w-5' />
+                      <Input
+                        type='password'
+                        {...register('confirmPassword')}
+                        className={`bg-surface-container-low h-11 rounded-xl pl-10 ${
+                          errors.confirmPassword ? 'border-error' : 'border-outline-variant/30'
+                        }`}
+                        placeholder='Re-type password'
+                      />
+                    </div>
+                    {errors.confirmPassword && (
+                      <p className='text-error mt-1 text-xs font-semibold'>
+                        {errors.confirmPassword.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
