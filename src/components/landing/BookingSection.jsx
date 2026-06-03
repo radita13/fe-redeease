@@ -55,12 +55,11 @@ export default function BookingSection() {
       alert('Please fill in a pick-up location');
       return;
     }
+    const targetUrl = `/cabs?pickup=${encodeURIComponent(pickup)}&dropoff=${encodeURIComponent(dropoff)}&pickupDate=${pickupDate}`;
     if (!isAuthenticated) {
-      navigate('/login');
+      navigate('/login', { state: { from: targetUrl } });
     } else {
-      navigate(
-        `/cabs?pickup=${encodeURIComponent(pickup)}&dropoff=${encodeURIComponent(dropoff)}&pickupDate=${pickupDate}`,
-      );
+      navigate(targetUrl);
     }
   };
 

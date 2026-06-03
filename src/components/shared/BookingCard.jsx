@@ -63,7 +63,7 @@ export default function BookingCard({ booking, onCancel, onRateClick, onTrackCli
           <Calendar className='text-primary h-4.5 w-4.5' />
           <div>
             <p className='text-outline text-xs font-semibold'>Date & Time</p>
-            <p className='text-on-surface font-bold'>{formatBookingDate(booking.createdAt)}</p>
+            <p className='text-on-surface font-bold'>{formatBookingDate(ride.startTime || booking.createdAt)}</p>
           </div>
         </div>
         <div className='flex items-center gap-2'>

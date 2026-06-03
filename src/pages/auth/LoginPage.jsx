@@ -128,7 +128,7 @@ export default function LoginPage() {
       <div className='text-on-surface-variant text-center text-sm font-semibold'>
         Don't have an account?{' '}
         <span
-          onClick={() => navigate('/register')}
+          onClick={() => navigate('/register', { state: location.state })}
           className='text-primary cursor-pointer font-bold hover:underline'
         >
           Sign Up

@@ -115,13 +115,17 @@ export default function CabsPage() {
 
   const handleSelectCab = (cab) => {
     if (!isAuthenticated) {
-      navigate('/login');
+      navigate('/login', {
+        state: {
+          from: `/cabs?pickup=${encodeURIComponent(pickup)}&dropoff=${encodeURIComponent(dropoff)}&pickupDate=${pickupDate}`,
+        },
+      });
     } else {
       setSelectedCab(cab);
       setSearchQuery({
-        pickup: urlPickup,
-        dropoff: urlDropoff,
-        pickupDate: urlPickupDate,
+        pickup: pickup,
+        dropoff: dropoff,
+        pickupDate: pickupDate,
       });
       navigate(`/book/${cab._id}`);
     }

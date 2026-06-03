@@ -152,6 +152,7 @@ export default function BookCabPage() {
         pickup: pickup.trim(),
         dropoff: dropoff.trim(),
         fare: totalFare,
+        startTime: pickupDate ? new Date(pickupDate) : null,
       });
 
       if (!rideRes.success) {

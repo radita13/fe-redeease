@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -19,6 +19,7 @@ const registerSchema = yup.object({
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { register: registerUser } = useAuth();
   const [loading, setLoading] = useState(false);
 
@@ -36,7 +37,7 @@ export default function RegisterPage() {
       const response = await registerUser(data);
       if (response.success) {
         toast.success('Registration successful! Please log in.');
-        navigate('/login');
+        navigate('/login', { state: location.state });
       } else {
         toast.error(response.message || 'Registration failed, please try again.');
       }
@@ -148,7 +149,7 @@ export default function RegisterPage() {
       <div className='text-on-surface-variant text-center text-sm font-semibold'>
         Already have an account?{' '}
         <span
-          onClick={() => navigate('/login')}
+          onClick={() => navigate('/login', { state: location.state })}
           className='text-primary cursor-pointer font-bold hover:underline'
         >
           Log In
