@@ -73,23 +73,46 @@ export default function BookingDetailsDialog({
             </div>
           </div>
 
-          {/* Payment Receipt Preview */}
-          <div>
-            <p className='text-label-md font-label-md text-on-surface-variant mb-2 flex items-center gap-2 font-bold tracking-wider uppercase'>
-              Payment Status:
-              <Badge
-                variant={booking.paymentID ? 'default' : 'secondary'}
-                className='rounded-full text-[10px] font-black uppercase'
-              >
-                {booking.paymentID ? 'Verified' : 'Pending/Cash'}
+          {/* Payment Details */}
+          <div className='space-y-3'>
+            <div className='flex items-center justify-between'>
+              <p className='text-label-md font-label-md text-on-surface-variant font-bold tracking-wider uppercase'>
+                Payment Method
+              </p>
+              <Badge variant='outline' className='rounded-full text-[11px] font-bold capitalize px-3 py-0.5 border-primary text-primary bg-primary/5'>
+                {booking.paymentMethod === 'card'
+                  ? 'Credit Card'
+                  : booking.paymentMethod === 'wallet'
+                  ? 'Wallet'
+                  : 'Cash'}
               </Badge>
-            </p>
+            </div>
+
+            <div className='flex items-center justify-between'>
+              <p className='text-label-md font-label-md text-on-surface-variant font-bold tracking-wider uppercase'>
+                Payment Status
+              </p>
+              <Badge
+                variant={
+                  booking.paymentID && (booking.paymentMethod !== 'cash' || booking.status === 'completed')
+                    ? 'default'
+                    : 'secondary'
+                }
+                className='rounded-full text-[11px] font-black uppercase px-3 py-0.5'
+              >
+                {booking.paymentID && (booking.paymentMethod !== 'cash' || booking.status === 'completed')
+                  ? 'Verified'
+                  : 'Pending'}
+              </Badge>
+            </div>
+
             {booking.paymentID && (
-              <p className='text-on-surface-variant mb-2 text-xs font-semibold'>
-                Payment ID: {booking.paymentID}
+              <p className='text-on-surface-variant text-right text-xs font-semibold mt-1'>
+                Payment ID: <span className='font-mono font-bold text-on-surface'>{booking.paymentID}</span>
               </p>
             )}
-            <div className='group border-outline-variant/40 bg-surface-container relative aspect-video overflow-hidden rounded-2xl border shadow-inner'>
+
+            <div className='group border-outline-variant/40 bg-surface-container relative aspect-video overflow-hidden rounded-2xl border shadow-inner mt-2'>
               <img
                 alt='Payment Receipt'
                 className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-105'

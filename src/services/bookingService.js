@@ -10,8 +10,8 @@ export const getMyBookings = async () => {
   return response.data;
 };
 
-export const createBooking = async (rideId) => {
-  const response = await apiClient.post('/bookings', { ride: rideId });
+export const createBooking = async (rideId, paymentMethod) => {
+  const response = await apiClient.post('/bookings', { ride: rideId, paymentMethod });
   return response.data;
 };
 

@@ -52,6 +52,7 @@ export default function BookCabPage() {
   const [bookingInProgress, setBookingInProgress] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingId, setBookingId] = useState('');
+  const [confirmedFare, setConfirmedFare] = useState(0);
 
   const [pickup, setPickup] = useState(storeQuery.pickup || '');
   const [dropoff, setDropoff] = useState(storeQuery.dropoff || '');
@@ -151,8 +152,9 @@ export default function BookCabPage() {
         cab: cabId,
         pickup: pickup.trim(),
         dropoff: dropoff.trim(),
-        fare: totalFare,
         startTime: pickupDate ? new Date(pickupDate) : null,
+        vipDriver,
+        carbonOffset,
       });
 
       if (!rideRes.success) {
@@ -161,7 +163,9 @@ export default function BookCabPage() {
         return;
       }
 
-      const bookingRes = await confirmBooking(rideRes.data._id);
+      setConfirmedFare(rideRes.data.fare);
+
+      const bookingRes = await confirmBooking(rideRes.data._id, paymentMethod);
       if (bookingRes.success) {
         setBookingId(bookingRes.data._id);
         setBookingSuccess(true);
@@ -232,7 +236,7 @@ export default function BookCabPage() {
               </div>
               <div className='flex items-center justify-between'>
                 <span className='text-outline font-semibold'>Fare Paid</span>
-                <span className='text-primary font-bold'>{formatCurrency(totalFare)}</span>
+                <span className='text-primary font-bold'>{formatCurrency(confirmedFare || totalFare)}</span>
               </div>
               <div className='bg-primary/10 text-primary mt-2 flex items-center justify-between rounded-lg p-2.5 text-xs font-bold'>
                 <span>Driver ETA</span>

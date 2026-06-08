@@ -44,11 +44,26 @@ export const useBookings = () => {
     }
   };
 
-  const handleConfirmBooking = async (rideId) => {
+  const handleGetRideEstimate = async (params) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await bookingService.createBooking(rideId);
+      const response = await rideService.getRideEstimate(params);
+      return response;
+    } catch (err) {
+      const errMsg = err.response?.data?.message || err.message || 'An error occurred';
+      setError(errMsg);
+      return { success: false, message: errMsg };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleConfirmBooking = async (rideId, paymentMethod) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await bookingService.createBooking(rideId, paymentMethod);
       if (response.success && response.data) {
         setActiveBooking(response.data);
       }
@@ -106,6 +121,7 @@ export const useBookings = () => {
     error,
     fetchMyBookings,
     requestRide: handleRequestRide,
+    getRideEstimate: handleGetRideEstimate,
     confirmBooking: handleConfirmBooking,
     cancelBooking: handleCancelBooking,
     rateBooking: handleRateBooking,

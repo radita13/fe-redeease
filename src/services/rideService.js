@@ -10,6 +10,11 @@ export const getMyRides = async () => {
   return response.data;
 };
 
+export const getRideEstimate = async (params) => {
+  const response = await apiClient.get('/rides/estimate', { params });
+  return response.data;
+};
+
 export const createRide = async (data) => {
   const response = await apiClient.post('/rides', data);
   return response.data;
